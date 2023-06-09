@@ -1,0 +1,112 @@
+ :root {
+  --mainColor : #E8F9FD;
+  --secondColor : #3ED233 ; 
+  --thirdColor : #FF1E00 ; 
+  --balckColor : #000000 ;
+  --blueColor : #1677FF;
+ }
+ 
+ .ant-layout {
+  min-height: 100vh;
+}
+ .ant-menu {
+  background: var(--balckColor) ;
+ }
+ .logo {
+  height: 64px;
+  background: var(--mainColor) ;
+  color: var(--blackColor);
+  text-align: center;
+  font-size: 2rem;
+  padding: 8px;
+  font-weight: 500;
+ }
+ .ant-layout-sider {
+  flex: 0 0 250px !important;
+  max-width: 250px !important;
+  min-width: 250px !important;
+  width: 250px !important;
+  background: var(--balckColor) !important;
+}
+.ant-layout-sider-collapsed {
+  flex: 0 0 80px !important;
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+}
+ .trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+  justify-content: ;
+}
+ .trigger:hover {
+  color: #1890ff;
+}
+.ant-layout-header h5 {
+  line-height: 20px;
+  font-size: 14px;
+}
+.ant-layout-header p {
+  line-height: 20px;
+  font-size: 13px;
+}
+
+.badge {
+  color: var(--balckColor) !important;
+}
+.MuiBadge-badge {
+  background: var(--secondColor) !important;
+}
+
+/* this is main content  */
+.ant-layout-content {
+  margin: 0 !important ;
+  background: var(--mainColor) !important;
+  height: 85vh;
+  overflow-y: scroll;
+ }
+main::-webkit-scrollbar {
+  width: 0px;
+}
+
+.addproduct{
+  width: fit-content;
+  background : var(--thirdColor) ;
+  border: none;
+}
+
+.dropzone{
+  padding: 20px;
+  border: 2px dashed var(--blueColor);
+}
+.dropzone  p {
+  text-align: center;
+}
+.hiphoto{
+  font-size: 5rem;
+  color: var(--blueColor);
+}
+
+.input-error {
+  color: var(--thirdColor);
+  padding-inline-start: 12px;
+} 
+
+.CodeMirror-scroll {
+  min-height: 150px !important ;
+}
+.show {
+  color: #1677FF;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.show:hover {
+  text-decoration: underline;
+}
+
+.biedit {
+  cursor: pointer;
+}

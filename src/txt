@@ -1,0 +1,182 @@
+import React, { useEffect, useState } from "react";
+import CustomInput from "../components/CustomInput";
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+import { useDropzone } from "react-dropzone";
+import { HiPhoto } from "react-icons/hi2";
+import { Formik, Field, Form, ErrorMessage, useFormik } from "formik";
+import { AddProdForm } from "../schemas/AddProdForm";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import {
+  createProducts,
+  resetState,
+  showProduct,
+  updateProducts,
+} from "../features/product/productSlice";
+import Desc from "../components/Desc";
+
+const AddProduct = () => {
+  const dispatch = useDispatch();
+  const newProduct = useSelector((state) => state.product);
+  const { isSuccess, isError, isLoading, products, updateProduct } = newProduct;
+
+  const initialValues = {
+    title: "",
+    description: "",
+    price: "",
+    category: "",
+    quantity: "",
+    image_url: "",
+  };
+  const updateProduct_initialValues = {
+    title: products.title,
+    description: products.description,
+    price: products.price,
+    category: products.category,
+    quantity: products.quantity,
+    image_url: products.image_url,
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Product Added Successfullly!");
+    }
+    if (isError) {
+      toast.error("Something Went Wrong!");
+    }
+  }, [isSuccess, isError, isLoading]);
+
+  const submitNewProduct = async (values, actions) => {
+    const payload = values;
+    // dispatch(createProducts(payload));
+    console.log(payload);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    actions.resetForm();
+    // dispatch(resetState());
+  };
+
+  const submitUpdatingProduct = async (values, actions) => {
+    const payload = values;
+    console.log(payload);
+    // dispatch(updateProducts(payload));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    actions.resetForm();
+    // dispatch(resetState());
+  };
+
+  //   dropzone code
+  // const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+  //   onDrop: (files) => {
+  //     setFieldValue("image_url", files[0].path);
+  //   },
+  // });
+  // const files = acceptedFiles.map((file) =>
+  //   values.image_url == "" ? (
+  //     ""
+  //   ) : (
+  //     <li key={file.path}>
+  //       {file.path} - {file.size} bytes
+  //     </li>
+  //   )
+  // );
+
+  // const {handleChange , values} = useFormik({}) 
+
+  // console.log(useFormik({}))
+  // console.log(values)
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={AddProdForm}
+      onSubmit={submitNewProduct}
+    >
+      {/* <h3 className="mb-4 title">{updateProduct ? "Update" : "Add"} Poduct</h3> */}
+      <Form className="d-flex gap-4 flex-column">
+        <CustomInput type="text" label="Enter Product title" name="title" />
+
+        <Desc name="description" />
+        {/* <Field component={SimpleMDE} name="descr" />
+        <ErrorMessage name="descr" />  */}
+
+        <CustomInput type="number" label="Enter Product price" name="price" />
+        <Field as="select" className="form-control mt-3" name="brand">
+          <option value="" disabled>
+            Select Brand
+          </option>
+          <option value="califit">CaliFit</option>
+        </Field>
+        <ErrorMessage name="brand" />
+        <Field as="select" className="form-control mt-3" name="category">
+          <option value="" disabled>
+            Select Category
+          </option>
+          <option value="push">Push</option>
+          <option value="pull">Pull</option>
+          <option value="legs">Legs</option>
+          <option value="others">Others</option>
+        </Field>
+        <ErrorMessage name="category" />
+        <CustomInput
+          type="number"
+          label="Enter Product Quantity"
+          name="quantity"
+        />
+{/* 
+        <section className="dropzone mt-3" name="image_url">
+          <div {...getRootProps({ className: "drop" })}>
+            <input {...getInputProps()} />
+            <div className="text-center">
+              <HiPhoto className="hiphoto" />
+              <p>Drop image here...</p>
+            </div>
+          </div>
+          <aside>
+            <h4>image_url</h4>
+            <ul>{files}</ul>
+          </aside>
+        </section> */}
+        <button
+          className="addproduct btn btn-success rounded-3 my-5"
+          type="submit"
+        >
+          {/* {updateProduct ? "Update" : "Add"}  */}
+          Poduct
+        </button>
+      </Form>
+    </Formik>
+  );
+};
+
+export default AddProduct;
+
+
+
+
+
+
+
+
+
+import React from "react";
+import { useField } from "formik";
+
+
+const CustomInput = ({type , label , id , name }) => {
+
+  const [field, meta] = useField({id,name});
+  return (
+    <div className="form-floating mt-3">
+      <input type={type} className="form-control" {...field} id={id} placeholder={label}/>
+      <label htmlFor={id || name}>{label}</label>
+      {meta.touched && meta.error ? (<div className="error">{meta.error}</div>): null}
+    </div>
+  );
+};
+
+export default CustomInput;
+
+
+
+
+
+
