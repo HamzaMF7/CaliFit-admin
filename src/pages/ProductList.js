@@ -1,26 +1,28 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Table } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
+import { Table, Button, Modal, Space } from "antd";
 import {
   getProducts,
   showProduct,
   restESL,
   deleteProduct,
   updatePageState,
-  resetState,
 } from "../features/product/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { Button, Modal, Space } from "antd";
+import { AudioOutlined } from "@ant-design/icons";
+import { Input } from "antd";
 
 const { confirm } = Modal;
+const { Search } = Input;
 
 const columns = [
   {
     title: "Number",
     dataIndex: "key",
+    render: (dataIndex) => dataIndex.number,
   },
   {
     title: "title",
@@ -60,10 +62,10 @@ const columns = [
   },
 ];
 
-const TextComponent = ({ text }) => {
+const TextComponent = React.memo(({ text }) => {
   const [expanded, setExpanded] = useState(false);
 
-  const words = text.split(" ");
+  const words = text?.split(" ") || [];
   const shortText = words.slice(0, 17).join(" ");
   const longText = words.slice(17).join(" ");
 
@@ -83,26 +85,38 @@ const TextComponent = ({ text }) => {
         {expanded ? (
           <p>
             {longText}
-
-            {words.length > 17 && <span className="show" onClick={handleToggle}>Show less</span>}
+            {words.length > 17 && (
+              <span className="show" onClick={handleToggle}>
+                Show less
+              </span>
+            )}
           </p>
         ) : (
           <p>
             {shortText}...
             {words.length > 17 && (
-              <span className="show" onClick={handleToggle}>Show more</span>
+              <span className="show" onClick={handleToggle}>
+                Show more
+              </span>
             )}
           </p>
         )}
       </div>
     );
-};
+});
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const getProductsState = useSelector((state) => state.product);
-  const { isSuccess, isError, isLoading, products, message } = getProductsState;
+  const { isSuccess, isLoading, products } = useSelector(
+    (state) => state.product
+  );
+  const [query, setQuery] = useState(""); // Add query state
+
+  const handleSearch = (event) => {
+    const query = event.target.value;
+    setQuery(query); // Update the query state
+  };
 
   useEffect(() => {
     dispatch(getProducts());
@@ -112,13 +126,10 @@ const ProductList = () => {
     confirm({
       title: "Are you sure delete this product?",
       icon: <ExclamationCircleFilled />,
-      // content: "Some descriptions",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
       onOk() {
-        console.log("OK");
-        console.log(productId);
         dispatch(deleteProduct(productId))
           .then(() => dispatch(getProducts()))
           .catch((error) => console.error("Error deleting product:", error));
@@ -129,42 +140,97 @@ const ProductList = () => {
     });
   };
 
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const start = () => {
+    setLoading(true);
+    // ajax request after empty completing
+    deleteSelectionProducts();
+    setTimeout(() => {
+      setSelectedRowKeys([]);
+      setLoading(false);
+    }, 5000);
+  };
+  const onSelectChange = (newSelectedRowKeys) => {
+    // console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const deleteSelectionProducts = async () => {
+    try {
+      // Delete selected products
+      await Promise.all(
+        selectedRowKeys.map((element) => dispatch(deleteProduct(element.product_id)))
+      );
+  
+      // Fetch updated products
+      dispatch(getProducts());
+    } catch (error) {
+      console.error('Error deleting products:', error);
+    }
+  };
+  
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const hasSelected = selectedRowKeys.length > 0;
+
   const data1 = useMemo(() => {
     const data = [];
-    for (let i = 0; i < products.length; i++) {
-      data.push({
-        key: i + 1,
-        title: products[i].title,
-        description: products[i].description,
-        price: products[i].price,
-        category: products[i].category,
-        quantity: products[i].quantity,
-        image_url: products[i].image_url,
-        action: (
-          <div className="d-flex">
-            <BiEdit
-              className="biedit fs-3 text-danger"
-              onClick={() => {
-                dispatch(showProduct(products[i].id)).then(() => {
-                  dispatch(restESL());
-                  dispatch(updatePageState());
-                  navigate("/admin/product");
-                });
-              }}
-            />
-            <Button
-              className=" fs-3 text-danger pt-0 d-flex align-items-center justify-content-center"
-              onClick={() => handleDeleteProduct(products[i].id)}
-              type="solid"
-            >
-              <AiFillDelete />
-            </Button>
-          </div>
-        ),
-      });
+    const allProducts =
+      Object.values(products).filter((val) => {
+        if (query === "") {
+          return true; // Use true here to include all products
+        } else if (
+          val.title &&
+          val.title.toLowerCase().includes(query.toLowerCase())
+        ) {
+          return true;
+        }
+        return false;
+      }) ?? [];
+
+    if (allProducts) {
+      for (let i = 0; i < allProducts.length; i++) {
+        data.push({
+          key: {
+            number: i + 1,
+            product_id: allProducts[i].id,
+          },
+          title: allProducts[i].title,
+          description: allProducts[i].description,
+          price: allProducts[i].price,
+          category: allProducts[i].category,
+          quantity: allProducts[i].quantity,
+          image_url: allProducts[i].image_url,
+          action: (
+            <div className="d-flex">
+              <BiEdit
+                className="biedit fs-3 text-danger"
+                onClick={() => {
+                  dispatch(showProduct(allProducts[i]?.id)).then(() => {
+                    dispatch(restESL());
+                    dispatch(updatePageState());
+                    navigate("/admin/product");
+                  });
+                }}
+              />
+              <Button
+                className="fs-3 text-danger pt-0 d-flex align-items-center justify-content-center"
+                onClick={() => handleDeleteProduct(allProducts[i].id)}
+                type="solid"
+              >
+                <AiFillDelete />
+              </Button>
+            </div>
+          ),
+        });
+      }
     }
     return data;
-  }, [products]);
+  }, [products, query]); // Add query as a dependency
 
   useEffect(() => {
     if (isSuccess) {
@@ -174,9 +240,43 @@ const ProductList = () => {
 
   return (
     <div className="mt-4">
-      <h3 className="mb-5 title">ProductList</h3>
+      <h3 className="title">ProductList</h3>
+      <div className="m-3 searchBar">
+        <div className="deleteSelection">
+          <Button
+            type="primary"
+            onClick={start}
+            disabled={!hasSelected}
+            loading={loading}
+          >
+            Reload
+          </Button>
+          <span
+            style={{
+              marginLeft: 8,
+            }}
+          >
+            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+          </span>
+        </div>
+        <Space direction="vertical">
+          <Search
+            placeholder="Search for products"
+            allowClear
+            enterButton="Search"
+            size="large"
+            value={query}
+            onChange={handleSearch}
+          />
+        </Space>
+      </div>
       <div>
-        <Table columns={columns} dataSource={data1} loading={isLoading} />
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={data1}
+          loading={isLoading}
+        />
       </div>
     </div>
   );

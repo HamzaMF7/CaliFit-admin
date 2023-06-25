@@ -110,3 +110,12 @@ main::-webkit-scrollbar {
 .biedit {
   cursor: pointer;
 }
+
+.searchBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/* .searchBar  button {
+  background: var(--thirdColor);
+}  */

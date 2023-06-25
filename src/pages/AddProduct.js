@@ -71,10 +71,11 @@ const AddProduct = () => {
   const submitNewProduct = async (values, actions) => {
     console.log("new product :", values);
     const payload = values;
-    dispatch(createProduct(payload));
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    actions.resetForm();
-    dispatch(resetState());
+    console.log(payload);
+    // dispatch(createProduct(payload));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
+    // actions.resetForm();
+    // dispatch(resetState());
   };
 
   const submitUpdatingProduct = async (values, actions) => {
