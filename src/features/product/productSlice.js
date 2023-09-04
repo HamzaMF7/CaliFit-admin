@@ -152,12 +152,13 @@ const productSlice = createSlice({
         state.message = action.error;
       })
       .addCase(resetState, () => initialState)
-      .addCase(restESL(), (state)=>{
+      .addCase(restESL(), (state)=> {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = false; 
+        state.updatePage = false;
       });
   },
 });
 export const { updatePageState } = productSlice.actions;
-export default productSlice.reducer;
+export default productSlice.reducer; 

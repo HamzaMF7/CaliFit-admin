@@ -12,12 +12,7 @@ const createProduct = async (product) => {
 };
 
 const updateProduct = async (product, id) => {
-  const response = await axios.put(`${base_url}product/${id}`, product, {
-    headers: {
-      Accept: "application/json",
-      // "Content-Type": "multipart/form-data"
-    },
-  });
+  const response = await axios.post(`${base_url}product/${id}`, product, config);
   return response.data;
 };
 const showProduct = async (id) => {

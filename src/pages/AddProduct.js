@@ -12,10 +12,21 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   createProduct,
   resetState,
+  restESL,
   showProduct,
   updateProduct,
 } from "../features/product/productSlice";
 import { useNavigate } from "react-router-dom";
+import { PlusOutlined } from "@ant-design/icons";
+import { Modal, Upload } from "antd";
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const AddProduct = () => {
   const dispatch = useDispatch();
@@ -24,40 +35,13 @@ const AddProduct = () => {
   const { isSuccess, isError, isLoading, products, updatePage, message } =
     newProduct;
 
-  // console.log("**********");
-  // console.log(products);
-  // console.log("**********");
-  // console.log(isSuccess);
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(products);
-    console.log(isError);
-    console.log(isLoading);
-    console.log(isSuccess);
-    console.log("***********");
-    // toast("welcome");
-  }, []);
+    console.log("token changes :", token);
+  }, [token]);
 
-  const newProduct_initialValues = {
-    title: "",
-    description: "",
-    price: "",
-    category: "",
-    category_id: "",
-    quantity: "",
-    image_url: "",
-  };
-  const updateProduct_initialValues = {
-    title: products.title,
-    description: products.description,
-    price: products.price,
-    category: products.category,
-    category_id: products.category_id,
-    quantity: products.quantity,
-    image_url: products.image_url,
-  };
   useEffect(() => {
-    console.log(isSuccess);
     if (isSuccess) {
       updatePage
         ? toast.success("Product updated Successfullly!")
@@ -68,14 +52,88 @@ const AddProduct = () => {
     }
   }, [isSuccess, isError, isLoading, updatePage]);
 
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([]);
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChanges = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    setFieldValue("image_url", newFileList);
+    console.log("file list :", fileList);
+  };
+
+  useEffect(() => {
+    const updatedUrls = fileList.map((file) => file.originFileObj);
+    setFieldValue("image_url", updatedUrls);
+    // console.log("update urls : ", updatedUrls);
+  }, [fileList]);
+
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+  const newProduct_initialValues = {
+    title: "",
+    description: "",
+    price: "",
+    category: "",
+    category_id: "",
+    quantity: "",
+    image_url: [],
+  };
+  const updateProduct_initialValues = {
+    title: products.title,
+    description: products.description,
+    price: products.price,
+    category: products.category,
+    category_id: "",
+    quantity: products.quantity,
+    image_url: products.image_url,
+    _method: "PUT",
+  };
+
+  // useEffect(()=>{
+  //  const {image_url} = updateProduct_initialValues ;
+  //  console.log("image urls : ",image_url);
+  //  if (image_url.length > 0) {
+  //    const imagesFile =  image_url.map( image =>{
+  //      const file = new File([image.slice(17)], image.slice(17));
+  //      return file ;
+  //     })
+  //     console.log("images slice ", imagesFile);
+  //      handleChanges({fileList : imagesFile})
+  //  }
+  // },[updatePage])
+
   const submitNewProduct = async (values, actions) => {
     console.log("new product :", values);
     const payload = values;
     console.log(payload);
-    // dispatch(createProduct(payload));
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
-    // actions.resetForm();
-    // dispatch(resetState());
+    dispatch(createProduct(payload));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    actions.resetForm();
+    setFileList([]);
+    dispatch(resetState());
   };
 
   const submitUpdatingProduct = async (values, actions) => {
@@ -105,21 +163,7 @@ const AddProduct = () => {
     onSubmit: updatePage ? submitUpdatingProduct : submitNewProduct,
     enableReinitialize: true,
   });
-  //   dropzone code
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-    onDrop: (files) => {
-      setFieldValue("image_url", files[0]);
-    },
-  });
-  const files = acceptedFiles.map((file) =>
-    values.image_url == "" ? (
-      ""
-    ) : (
-      <li key={file.path}>
-        {file.path} - {file.size} bytes
-      </li>
-    )
-  );
+
   return (
     <div>
       <h3 className="mb-4 title">{updatePage ? "Update" : "Add"} Poduct</h3>
@@ -197,17 +241,6 @@ const AddProduct = () => {
         )}
         <CustomInput
           type="number"
-          label="Enter Category id"
-          name="category_id"
-          value={values.category_id}
-          onChange={handleChange("category_id")}
-          onBlur={handleBlur}
-        />
-        {errors.category_id && touched.price && (
-          <p className="input-error"> {errors.category_id}</p>
-        )}
-        <CustomInput
-          type="number"
           label="Enter Product Quantity"
           name="quantity"
           value={values.quantity}
@@ -218,19 +251,30 @@ const AddProduct = () => {
           <p className="input-error"> {errors.quantity}</p>
         )}
 
-        <section className="dropzone mt-3" name="image_url">
-          <div {...getRootProps({ className: "drop" })}>
-            <input {...getInputProps()} />
-            <div className="text-center">
-              <HiPhoto className="hiphoto" />
-              <p>Drop image here...</p>
-            </div>
-          </div>
-          <aside>
-            <h4>image_url</h4>
-            <ul>{files}</ul>
-          </aside>
-        </section>
+        <div className="dropzone mt-3">
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChanges}
+          >
+            {fileList.length >= 8 ? null : uploadButton}
+          </Upload>
+          <Modal
+            open={previewOpen}
+            title={previewTitle}
+            footer={null}
+            onCancel={handleCancel}
+          >
+            <img
+              alt="example"
+              style={{
+                width: "100%",
+              }}
+              src={previewImage}
+            />
+          </Modal>
+        </div>
         <div className="d-flex gap-2">
           <button
             className="addproduct btn btn-success rounded-3 my-5"
@@ -238,15 +282,22 @@ const AddProduct = () => {
           >
             {updatePage ? "Update" : "Add"} Poduct
           </button>
-          {updatePage ? <button
-            className="addproduct btn btn-success rounded-3  my-5"
-            type="button"
-            onClick={()=>{navigate("/admin/list-product")}}
-          >
-            cancel
-          </button> : ""}
+          {updatePage ? (
+            <button
+              className="addproduct btn btn-success rounded-3  my-5"
+              type="button"
+              onClick={() => {
+                navigate("/admin/list-product");
+                dispatch(restESL());
+              }}
+            >
+              cancel
+            </button>
+          ) : (
+            ""
+          )}
         </div>
-        <ToastContainer />
+        <ToastContainer autoClose={2000} />
       </form>
     </div>
   );

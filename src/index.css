@@ -1,27 +1,140 @@
- :root {
-  --mainColor : #E8F9FD;
-  --secondColor : #3ED233 ; 
-  --thirdColor : #FF1E00 ; 
-  --balckColor : #000000 ;
-  --blueColor : #1677FF;
- }
- 
- .ant-layout {
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500&family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Sirin+Stencil&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap");
+
+:root {
+  --mainColor: #e8f9fd;
+  --secondColor: #3ed233;
+  --thirdColor: #ff1e00;
+  --balckColor: #000000;
+  --blueColor: #1677ff;
+  --font-inter: "Inter", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+  --font-lobster: "Lobster", cursive;
+  --font-marker: "Permanent Marker", cursive;
+  --font-sirin: "Sirin Stencil", cursive;
+  --font-script: "Kaushan Script", cursive;
+}
+
+.logout:hover {
+  color: var(--blueColor);
+}
+.onLogout{
+  text-decoration: none;
+  color: var(--blackColor);
+  font-weight: 500;
+}
+.onLogout:hover {
+  color: var(--blueColor);
+}
+
+#guestLayout {
+  height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* background-color: #d8895e27; */
+}
+.login-error {
+  background-color: var(--thirdColor);
+  padding: 8px 15px;
+  border-radius: 6px;
+  color: white;
+  font-size: 1em;
+}
+.login-image {
+  position: relative;
+}
+.login-image .brand {
+  position: absolute;
+  color: var(--balckColor);
+  font-size: 60px;
+  font-family: var(--font-marker);
+  font-weight: 500;
+  letter-spacing: 0cap;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 4px;
+  text-shadow: -2px 5px 17px var(--secondColor);
+}
+.login-image > img {
+  height: 100vh;
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+}
+
+.login , .register {
+  height: 100%;
+  flex: 1;
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px 0px;
+  /* background-color: #E8F9FD; */
+}
+h2 {
+  text-transform: capitalize;
+}
+.login-form {
+  min-width: 350px;
+}
+.signup-form {
+  min-width: 450px;
+
+}
+.site-form-item-icon , .signup-input {
+  padding: 10px;
+}
+.login-form-button , .signup-form-button {
+  width: 100%;
+  height: 42px;
+}
+.login-form-forgot {
+  margin-left: 120px;
+}
+
+.login-form-button ,.signup-form-button {
+  color: #fff !important;
+  background-color: black !important;
+}
+.login-form-button:hover , .signup-form-button:hover {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+}
+
+.ant-form-item {
+  border-color: #000000 !important;
+}
+
+/* .ant-form-item-control-input-content {
+  display: flex;
+  justify-content: space-between;
+} */
+
+.ant-layout {
   min-height: 100vh;
 }
- .ant-menu {
-  background: var(--balckColor) ;
- }
- .logo {
+.ant-menu {
+  background: var(--balckColor);
+}
+.logo {
   height: 64px;
-  background: var(--mainColor) ;
+  background: var(--mainColor);
   color: var(--blackColor);
   text-align: center;
   font-size: 2rem;
   padding: 8px;
   font-weight: 500;
- }
- .ant-layout-sider {
+}
+.ant-layout-sider {
   flex: 0 0 250px !important;
   max-width: 250px !important;
   min-width: 250px !important;
@@ -34,7 +147,7 @@
   min-width: 80px !important;
   width: 80px !important;
 }
- .trigger {
+.trigger {
   padding: 0 24px;
   font-size: 18px;
   line-height: 64px;
@@ -42,7 +155,7 @@
   transition: color 0.3s;
   justify-content: ;
 }
- .trigger:hover {
+.trigger:hover {
   color: #1890ff;
 }
 .ant-layout-header h5 {
@@ -67,25 +180,25 @@
   background: var(--mainColor) !important;
   height: 85vh;
   overflow-y: scroll;
- }
+}
 main::-webkit-scrollbar {
   width: 0px;
 }
 
-.addproduct{
+.addproduct {
   width: fit-content;
-  background : var(--thirdColor) ;
+  background: var(--thirdColor);
   border: none;
 }
 
-.dropzone{
+.dropzone {
   padding: 20px;
   border: 2px dashed var(--blueColor);
 }
-.dropzone  p {
+.dropzone p {
   text-align: center;
 }
-.hiphoto{
+.hiphoto {
   font-size: 5rem;
   color: var(--blueColor);
 }
@@ -93,13 +206,13 @@ main::-webkit-scrollbar {
 .input-error {
   color: var(--thirdColor);
   padding-inline-start: 12px;
-} 
+}
 
 .CodeMirror-scroll {
   min-height: 150px !important ;
 }
 .show {
-  color: #1677FF;
+  color: #1677ff;
   margin-left: 5px;
   cursor: pointer;
 }
@@ -119,3 +232,10 @@ main::-webkit-scrollbar {
 /* .searchBar  button {
   background: var(--thirdColor);
 }  */
+
+.custom-table-title{
+  color: var(--blueColor);
+}
+.rollback-btn{
+  cursor: pointer;
+}

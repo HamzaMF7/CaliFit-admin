@@ -1,13 +1,11 @@
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
-import {  Layout, Menu, theme } from "antd";
-import Badge from '@mui/material/Badge';
-import React, { useState } from "react";
+import { Layout, Menu, theme } from "antd";
+import Badge from "@mui/material/Badge";
+import React, { useEffect, useState } from "react";
 import {
   AiOutlineDashboard,
   AiOutlineShoppingCart,
@@ -20,13 +18,31 @@ import { IoIosNotifications } from "react-icons/io";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
 import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
-import { Link, useNavigate, Outlet } from "react-router-dom";
-
+import { Link, useNavigate, Outlet, Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getUSer, logout, resetState } from "../features/userSlice";
+import { useStateContext } from "../context/ContextProvider";
 const { Header, Sider, Content } = Layout;
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { token, setToken } = useStateContext();
+  // const [user, setUser] = useState({ name: "", email: "" });
+  
+  if (!token) {
+    return <Navigate to="/" />;
+  }
+
+  const onLogout = (e) => {
+    e.preventDefault();
+    dispatch(logout()).then(() => {
+      setToken(null);
+      dispatch(resetState());
+    });
+  };
+
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -35,12 +51,11 @@ const MainLayout = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["1"]}
-          onClick={({key})=>{
+          onClick={({ key }) => {
             if (key == "signout") {
-            } else if(key == 1){
-                navigate("");
-            }
-            else {
+            } else if (key == 1) {
+              navigate("");
+            } else {
               navigate(key);
             }
           }}
@@ -93,7 +108,7 @@ const MainLayout = () => {
               label: "Marketing",
               children: [
                 {
-                  key: "coupon",
+                  key: "add-coupon",
                   icon: <ImBlog className="fs-4" />,
                   label: "Add Coupon",
                 },
@@ -104,11 +119,11 @@ const MainLayout = () => {
                 },
               ],
             },
-            {
-              key: "enquiries",
-              icon: <FaClipboardList className="fs-4" />,
-              label: "Enquiries",
-            },
+            // {
+            //   key: "enquiries",
+            //   icon: <FaClipboardList className="fs-4" />,
+            //   label: "Enquiries",
+            // },
           ]}
         />
       </Sider>
@@ -128,49 +143,22 @@ const MainLayout = () => {
             }
           )}
           <div className="profile d-flex gap-4 align-items-center mx-2">
-            <div className="badge">
+            {/* <div className="badge">
               <Badge color="secondary" overlap="circular" badgeContent="3">
                 {<IoIosNotifications className="fs-3" />}
               </Badge>
-            </div>
+            </div> */}
 
-            <div className="d-flex gap-3 align-items-center dropdown">
-              <div>
-                <img
-                  width={32}
-                  //   height={32}
-                  // src="https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-4-64x64.jpg"
-                  alt=""
-                />
+            <div className="d-flex gap-3 align-items-center ">
+              <div className="user-info">
+                <h5 className="mb-0 text-capitalize">Hi, {localStorage.getItem("userName")} !</h5>
+                <p className="mb-0 ">{localStorage.getItem("Email")}</p>
               </div>
-              <div
-                role="button"
-                id="dropdownMenuLink"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <h5 className="mb-0">Hamza maerof</h5>
-                <p className="mb-0">hamzamaerof98@gmail.com</p>
-              </div>
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li>
-                  <Link
-                    className="dropdown-item py-1 mb-1"
-                    style={{ height: "auto", lineHeight: "20px" }}
-                    to="/"
-                  >
-                    View Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item py-1 mb-1"
-                    style={{ height: "auto", lineHeight: "20px" }}
-                    to="/"
-                  >
-                    Signout
-                  </Link>
-                </li>
+              <div className="logout d-flex gap-2 align-items-center ">
+                <LogoutOutlined className="fs-5" />
+                <a className="onLogout" onClick={onLogout} href="#">
+                  Logout
+                </a>
               </div>
             </div>
           </div>

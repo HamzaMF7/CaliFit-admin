@@ -50,7 +50,7 @@ const columns = [
     dataIndex: "image_url",
     render: (image_url) => (
       <img
-        src={"http://127.0.0.1:8000/storage/" + image_url}
+        src={image_url && "http://127.0.0.1:8000/storage/" + image_url[0]}
         alt="Product Image"
         style={{ width: "100px" }}
       />
@@ -121,7 +121,10 @@ const ProductList = () => {
   useEffect(() => {
     dispatch(getProducts());
   }, []);
+  
+  console.log(products);
 
+ 
   const handleDeleteProduct = (productId) => {
     confirm({
       title: "Are you sure delete this product?",
@@ -162,7 +165,6 @@ const ProductList = () => {
       await Promise.all(
         selectedRowKeys.map((element) => dispatch(deleteProduct(element.product_id)))
       );
-  
       // Fetch updated products
       dispatch(getProducts());
     } catch (error) {
@@ -210,7 +212,7 @@ const ProductList = () => {
               <BiEdit
                 className="biedit fs-3 text-danger"
                 onClick={() => {
-                  dispatch(showProduct(allProducts[i]?.id)).then(() => {
+                  dispatch(showProduct(allProducts[i]?.id)).then((product) => {
                     dispatch(restESL());
                     dispatch(updatePageState());
                     navigate("/admin/product");

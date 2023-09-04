@@ -1,52 +1,61 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 import { BsArrowDownRight, BsArrowUpRight } from "react-icons/bs";
-import { Table } from "antd";
+import { Table, Spin } from "antd";
+import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Orders from "./Orders";
+import { getOrders, isRecentOrders } from "../features/orderSlice";
 
 const Dashboard = () => {
-    const columns = [
-        {
-          title: "SNo",
-          dataIndex: "key",
-        },
-        {
-          title: "Name",
-          dataIndex: "name",
-        },
-        {
-          title: "Product",
-          dataIndex: "product",
-        },
-        {
-          title: "Status",
-          dataIndex: "staus",
-        },
-      ];
-      const data1 = [];
-      for (let i = 0; i < 46; i++) {
-        data1.push({
-          key: i,
-          name: `Edward King ${i}`,
-          product: 32,
-          staus: `London, Park Lane no. ${i}`,
-        });
-      }
+  const dispatch = useDispatch();
+  const { orders, isSuccess, isError, isLoading } = useSelector(
+    (state) => state.order
+  );
+  useEffect(() => {
+    dispatch(getOrders());
+    dispatch(isRecentOrders());
+    console.log("orders :", orders);
+  }, []);
+
+  const totalSales = () => {
+    let total = 0;
+    orders?.forEach((item) => {
+      total += +item.total_price;
+    });
+    return total;
+  };
+
+  // useEffect(() => {
+  //   orders?.forEach((item) => setTotalSales((prev) => prev + (+item.total_price)));
+  // }, []);
+  // console.log(totalSales);
   return (
     <div>
       <h3 className="mb-4 title">Dashboard</h3>
       <div className="d-flex justify-content-between align-items-center gap-3">
-        <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
-          <div>
-            <p className="desc">Total</p>
-            <h4 className="mb-0 sub-title">$1100</h4>
+        <div className="bg-white p-3 roudned-3">
+          <div style={{ width: "200px", height: "65px" }}>
+            {isLoading ? (
+              <div className="d-flex justify-content-center align-items-center h-100 ">
+                <Spin size="small" />
+              </div>
+            ) : (
+              <>
+                <p className="desc">Total Sales</p>
+                <h4 className="mb-0 sub-title text-end">
+                  {orders.length > 0 && totalSales()}DH
+                </h4>
+              </>
+            )}
           </div>
-          <div className="d-flex flex-column align-items-end">
+          {/* <div className="d-flex flex-column align-items-end">
             <h6>
               <BsArrowDownRight /> 32%
             </h6>
             <p className="mb-0  desc">Compared To April 2022</p>
-          </div>
+          </div> */}
         </div>
-        <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
+        {/* <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
           <div>
             <p className="desc">Total</p>
             <h4 className="mb-0 sub-title">$1100</h4>
@@ -69,16 +78,13 @@ const Dashboard = () => {
             </h6>
             <p className="mb-0 desc">Compared To April 2022</p>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="mt-4">
-        <h3 className="mb-5 title">Recent Orders</h3>
-        <div>
-          <Table columns={columns} dataSource={data1} />
-        </div>
+        <Orders />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
