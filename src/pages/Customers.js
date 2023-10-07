@@ -3,7 +3,7 @@ import { Table } from "antd";
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCustomer, getCustomers, restESL } from '../features/customerSlice';
 import { AiFillDelete } from "react-icons/ai";
-import { ExclamationCircleFilled } from "@ant-design/icons";
+import { ExclamationCircleFilled , UserOutlined } from "@ant-design/icons";
 import { Button, Modal } from "antd";
 
 const { confirm } = Modal;
@@ -98,7 +98,7 @@ const Customers = () => {
 
       return (
         <div className="mt-4">
-        <h3 className="mb-5 title"> customers</h3>
+        <h3 className="mb-5 title d-flex align-items-center gap-2"><UserOutlined /> customers</h3>
         <div>
           <Table columns={columns} dataSource={data1} loading={isLoading} />
         </div>

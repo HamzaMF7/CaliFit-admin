@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import loginImg from "../images/Street Workout.jpeg";
+import loginImg from "../images/Street Workout.webp";
 import { useDispatch, useSelector } from "react-redux";
 import { useStateContext } from "../context/ContextProvider";
 

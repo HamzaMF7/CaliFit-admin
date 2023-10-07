@@ -1,6 +1,6 @@
 import "./App.css";
 import "./index.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Resetpassword from "./pages/Resetpassword";
 import Forgotpassword from "./pages/Forgotpassword";
 import MainLayout from "./components/MainLayout";
@@ -20,7 +20,7 @@ import OrderDetails from "./pages/OrderDetails";
 
 function App() {
   return (
-    <Router>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<GuestLayout />}>
           <Route index element={<Login />} />
@@ -41,7 +41,7 @@ function App() {
           <Route path="order-details/:orderId" element={<OrderDetails />} />
         </Route>
       </Routes>
-    </Router>
+    </HashRouter>
   );
 }
 

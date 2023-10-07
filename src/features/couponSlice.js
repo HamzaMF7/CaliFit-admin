@@ -6,7 +6,7 @@ export const getCoupons = createAsyncThunk(
   "coupon/get-coupons",
   async (thunkAPI) => {
     try {
-      const response = await axios.get(`${base_url}coupons/`);
+      const response = await axios.get(`${base_url}/api/coupons`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -18,7 +18,7 @@ export const deleteCoupon = createAsyncThunk(
   "coupon/delete-coupon",
   async (id, thunkAPI) => {
     try {
-      const response = await axios.delete(`${base_url}coupon/${id}`, {
+      const response = await axios.delete(`${base_url}/api/coupon/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -34,7 +34,7 @@ export const createCoupon = createAsyncThunk(
   "coupon/create-coupon",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`${base_url}coupon`, payload, {
+      const response = await axios.post(`${base_url}/api/coupon`, payload, {
         headers: {
           "Content-Type": "application/json",
         },

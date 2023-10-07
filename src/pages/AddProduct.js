@@ -17,7 +17,7 @@ import {
   updateProduct,
 } from "../features/product/productSlice";
 import { useNavigate } from "react-router-dom";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined , AppstoreAddOutlined , FormOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 
 const getBase64 = (file) =>
@@ -166,10 +166,10 @@ const AddProduct = () => {
 
   return (
     <div>
-      <h3 className="mb-4 title">{updatePage ? "Update" : "Add"} Poduct</h3>
+      <div className="mb-3 title d-flex align-items-center gap-1 ">{updatePage ? (<div className="d-flex align-items-center gap-2"><FormOutlined /> <span>Update</span></div>) : (<div className="d-flex align-items-center gap-2"><AppstoreAddOutlined /> <span>Add</span></div>)} <span>Product</span></div>
       <form
         action=""
-        className="d-flex gap-4 flex-column"
+        className="d-flex flex-column"
         onSubmit={handleSubmit}
         // encType="multipart/form-data"
       >
@@ -182,7 +182,7 @@ const AddProduct = () => {
           onBlur={handleBlur}
         />
         {touched.title && errors.title && (
-          <p className="input-error"> {errors.title}</p>
+          <span className="input-error"> {errors.title}</span>
         )}
         <SimpleMDE
           className="mt-3"
@@ -192,7 +192,7 @@ const AddProduct = () => {
           onBlur={handleBlur("description")}
         />
         {errors.description && touched.description && (
-          <p className="input-error"> {errors.description}</p>
+          <span className="input-error"> {errors.description}</span>
         )}
         <CustomInput
           type="number"
@@ -203,7 +203,7 @@ const AddProduct = () => {
           onBlur={handleBlur}
         />
         {errors.price && touched.price && (
-          <p className="input-error"> {errors.price}</p>
+          <span className="input-error"> {errors.price}</span>
         )}
         <select
           className="form-control mt-3"
@@ -218,7 +218,7 @@ const AddProduct = () => {
           <option value="califit">CaliFit</option>
         </select>
         {/* {errors.brand && touched.brand && (
-          <p className="input-error"> {errors.brand}</p>  
+          <span className="input-error"> {errors.brand}</span>  
         )} */}
 
         <select
@@ -237,7 +237,7 @@ const AddProduct = () => {
           <option value="others">Others</option>
         </select>
         {errors.category && touched.category && (
-          <p className="input-error"> {errors.category}</p>
+          <span className="input-error"> {errors.category}</span>
         )}
         <CustomInput
           type="number"
@@ -248,7 +248,7 @@ const AddProduct = () => {
           onBlur={handleBlur}
         />
         {errors.quantity && touched.quantity && (
-          <p className="input-error"> {errors.quantity}</p>
+          <span className="input-error"> {errors.quantity}</span>
         )}
 
         <div className="dropzone mt-3">
@@ -275,16 +275,15 @@ const AddProduct = () => {
             />
           </Modal>
         </div>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 my-5">
           <button
-            className="addproduct btn btn-success rounded-3 my-5"
-            type="submit"
+            className="addproduct btn btn-success rounded-3 p-2"
           >
             {updatePage ? "Update" : "Add"} Poduct
           </button>
           {updatePage ? (
             <button
-              className="addproduct btn btn-success rounded-3  my-5"
+              className="addproduct btn btn-success rounded-3 p-2"
               type="button"
               onClick={() => {
                 navigate("/admin/list-product");

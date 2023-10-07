@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Orders from "./Orders";
 import { getOrders, isRecentOrders } from "../features/orderSlice";
+import {DashboardOutlined} from "@ant-design/icons" ;
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const Dashboard = () => {
   // console.log(totalSales);
   return (
     <div>
-      <h3 className="mb-4 title">Dashboard</h3>
+      <h3 className="mb-4 title d-flex align-items-center gap-2"><DashboardOutlined /> Dashboard</h3>
       <div className="d-flex justify-content-between align-items-center gap-3">
         <div className="bg-white p-3 roudned-3">
           <div style={{ width: "200px", height: "65px" }}>

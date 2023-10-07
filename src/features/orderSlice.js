@@ -6,7 +6,7 @@ export const getOrders = createAsyncThunk(
   "order/get-orders",
   async (thunkAPI) => {
     try {
-      const response = await axios.get(`${base_url}orders/`);
+      const response = await axios.get(`${base_url}/api/orders`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -19,7 +19,7 @@ export const updateOrder = createAsyncThunk(
   async ({ id, statusValue }, thunkAPI) => {
     try {
       const response = await axios.put(
-        `${base_url}order/${id}`,
+        `${base_url}/api/order/${id}`,
         { status: statusValue },
         {
           headers: {
@@ -39,7 +39,7 @@ export const showOrder = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const response = await axios.get(
-        `${base_url}order/${id}`
+        `${base_url}/api/order/${id}`
         // {
         //   headers: {
         //     "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export const deleteOrder = createAsyncThunk(
   "order/delete-order",
   async (id, thunkAPI) => {
     try {
-      const response = await axios.delete(`${base_url}order/${id}`, {
+      const response = await axios.delete(`${base_url}/api/order/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -68,8 +68,25 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
+// export const orderNotification = createAsyncThunk(
+//   "order/order-notification", 
+//   (_, thunkAPI) => {
+//     const { orders } = thunkAPI.getState().order;
+//     console.log("orders:",orders);
+//     const notificationOrder = orders.map((item) => ({
+//       id: item.id,
+//       date: item.date,
+//       amount: item.total_price,
+//     }));
+//     console.log("redux notification order :",notificationOrder);
+//     return notificationOrder.reverse();
+//   }
+// );
+
+
 const initialState = {
   orders: [],
+  notificationOrder: [],
   isError: false,
   isLoading: false,
   isSuccess: false,

@@ -23,10 +23,16 @@
   --font-script: "Kaushan Script", cursive;
 }
 
+.title {
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
 .logout:hover {
   color: var(--blueColor);
 }
-.onLogout{
+.onLogout {
   text-decoration: none;
   color: var(--blackColor);
   font-weight: 500;
@@ -70,7 +76,8 @@
   border-top-left-radius: 6px;
 }
 
-.login , .register {
+.login,
+.register {
   height: 100%;
   flex: 1;
   /* width: 100%; */
@@ -89,12 +96,13 @@ h2 {
 }
 .signup-form {
   min-width: 450px;
-
 }
-.site-form-item-icon , .signup-input {
+.site-form-item-icon,
+.signup-input {
   padding: 10px;
 }
-.login-form-button , .signup-form-button {
+.login-form-button,
+.signup-form-button {
   width: 100%;
   height: 42px;
 }
@@ -102,11 +110,13 @@ h2 {
   margin-left: 120px;
 }
 
-.login-form-button ,.signup-form-button {
+.login-form-button,
+.signup-form-button {
   color: #fff !important;
   background-color: black !important;
 }
-.login-form-button:hover , .signup-form-button:hover {
+.login-form-button:hover,
+.signup-form-button:hover {
   background-color: rgba(0, 0, 0, 0.85) !important;
 }
 
@@ -169,6 +179,60 @@ h2 {
 
 .badge {
   color: var(--balckColor) !important;
+  position: relative;
+  transition: 0.2s;
+}
+.badge-icon {
+  cursor: pointer;
+}
+.notification {
+  position: absolute;
+  width: 280px;
+  height: 290px;
+  background-color: white;
+  right: 0;
+  top: 52px;
+  z-index: 1;
+  border-radius: 6px;
+  border-bottom: 1px solid #f0f0f0;
+  overflow-y: scroll;
+}
+.notification::-webkit-scrollbar {
+  width: 5px; /* Set the width of the scrollbar */
+  position: relative;
+  right: -5px;
+}
+
+.notification::-webkit-scrollbar-thumb {
+  background-color: #DFD8D2; /* Set the color of the scrollbar thumb (the draggable part) */
+  border-radius: 5px; /* Add rounded corners to the thumb */
+}
+.notification .notification-order {
+  padding: 20px 10px;
+  font-size: 0.8rem;
+  width: 100%;
+  margin-bottom: 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.notification-order:hover {
+  background-color: #f0f0f0;
+}
+.n-date{
+  font-weight: 400;
+}
+.clear-btn {
+  cursor: pointer;
+}
+.order-info > span {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.order-info > span:hover {
+  color: var(--blueColor);
 }
 .MuiBadge-badge {
   background: var(--secondColor) !important;
@@ -192,8 +256,11 @@ main::-webkit-scrollbar {
 }
 
 .dropzone {
-  padding: 20px;
-  border: 2px dashed var(--blueColor);
+  /* padding: 20px; */
+  padding: 1rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background-color: #fff;
 }
 .dropzone p {
   text-align: center;
@@ -204,6 +271,7 @@ main::-webkit-scrollbar {
 }
 
 .input-error {
+  margin-top: 3px;
   color: var(--thirdColor);
   padding-inline-start: 12px;
 }
@@ -233,9 +301,9 @@ main::-webkit-scrollbar {
   background: var(--thirdColor);
 }  */
 
-.custom-table-title{
+.custom-table-title {
   color: var(--blueColor);
 }
-.rollback-btn{
+.rollback-btn {
   cursor: pointer;
 }

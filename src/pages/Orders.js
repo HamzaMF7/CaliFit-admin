@@ -10,6 +10,7 @@ import {
 } from "../features/orderSlice";
 import { AiFillDelete } from "react-icons/ai";
 import { ExclamationCircleFilled, EyeOutlined } from "@ant-design/icons";
+import { FaClipboardList } from "react-icons/fa";
 import { Button, Modal, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -96,7 +97,10 @@ const Orders = () => {
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
-    let newDate = `${year}-${month}-${day}`;
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    let newDate = `${year}-${month}-${day}   ${hours}:${minutes}:${seconds}`;
     return newDate;
   };
 
@@ -142,7 +146,7 @@ const Orders = () => {
 
   return (
     <div className="mt-4">
-      <h3 className="mb-5 title">{recentOrder ? "Recent" : ""} Orders</h3>
+      <h3 className="mb-5 title d-flex align-items-center gap-2"><FaClipboardList/>{recentOrder ? "Recent" : ""} Orders</h3>
       <div>
         <Table columns={columns} dataSource={data1} loading={isLoading} />
       </div>

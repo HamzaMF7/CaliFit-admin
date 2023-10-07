@@ -12,8 +12,9 @@ import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { AudioOutlined } from "@ant-design/icons";
+import { FileSearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
+import { base_url } from "../utils/baseUrl";
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -50,7 +51,7 @@ const columns = [
     dataIndex: "image_url",
     render: (image_url) => (
       <img
-        src={image_url && "http://127.0.0.1:8000/storage/" + image_url[0]}
+        src={image_url && `${base_url}/storage/` + image_url[0]}
         alt="Product Image"
         style={{ width: "100px" }}
       />
@@ -242,7 +243,7 @@ const ProductList = () => {
 
   return (
     <div className="mt-4">
-      <h3 className="title">ProductList</h3>
+      <h3 className="title d-flex align-items-center gap-2"><FileSearchOutlined /> Product List</h3>
       <div className="m-3 searchBar">
         <div className="deleteSelection">
           <Button
@@ -251,7 +252,7 @@ const ProductList = () => {
             disabled={!hasSelected}
             loading={loading}
           >
-            Reload
+            Delete
           </Button>
           <span
             style={{

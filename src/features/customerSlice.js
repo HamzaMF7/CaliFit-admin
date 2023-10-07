@@ -7,7 +7,7 @@ export const getCustomers = createAsyncThunk(
   "customers/get-customers",
   async (thunkAPI) => {
     try {
-      const response = await axios.get(`${base_url}customer/`);
+      const response = await axios.get(`${base_url}/api/customer`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -19,7 +19,7 @@ export const deleteCustomer = createAsyncThunk(
   "customer/delete-customer",
   async (id, thunkAPI) => {
     try {
-      const response = await axios.delete(`${base_url}customer/${id}`, {
+      const response = await axios.delete(`${base_url}/api/customer/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },

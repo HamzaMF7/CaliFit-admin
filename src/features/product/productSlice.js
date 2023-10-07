@@ -45,6 +45,7 @@ export const showProduct = createAsyncThunk(
     }
   }
 );
+
 export const deleteProduct = createAsyncThunk(
   "product/delete-product",
   async (id, thunkAPI) => {

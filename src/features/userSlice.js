@@ -23,7 +23,7 @@ export const login = createAsyncThunk(
   "user/login",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`${base_url}login`, payload, config);
+      const response = await axios.post(`${base_url}/api/login`, payload, config);
       return response.data;
     } catch (err) {
       // console.log(error.response);
@@ -43,7 +43,7 @@ export const signup = createAsyncThunk(
   "user/signup",
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.post(`${base_url}signup`, payload, config);
+      const response = await axios.post(`${base_url}/api/signup`, payload, config);
       return response.data;
     } catch (err) {
       const response = err.response;
@@ -57,7 +57,7 @@ export const signup = createAsyncThunk(
 
 export const logout = createAsyncThunk("user/logout", async () => {
   try {
-    const response = await axios.post(`${base_url}logout`, null, {
+    const response = await axios.post(`${base_url}/api/logout`, null, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("ACCESS_TOKEN")}`,
       },

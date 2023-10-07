@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signup } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useStateContext } from "../context/ContextProvider";
+import { Link } from "react-router-dom";
 const { Option } = Select;
 
 const formItemLayout = {
@@ -166,6 +167,7 @@ const Signup = () => {
           >
             Register
           </Button>
+          Or <Link to="/">Log in!</Link>
         </Form.Item>
       </Form>
     </div>

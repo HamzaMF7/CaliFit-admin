@@ -6,6 +6,7 @@ import { LeftSquareOutlined } from "@ant-design/icons";
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 
 import { Descriptions, Table, Skeleton } from "antd";
+import { base_url } from "../utils/baseUrl";
 
 const columns = [
   {
@@ -17,7 +18,7 @@ const columns = [
     dataIndex: "image",
     render: (image) => (
       <img
-        src={image && "http://127.0.0.1:8000/storage/" + image}
+        src={image && `${base_url}/storage/` + image}
         alt="Product Image"
         style={{ width: "100px" }}
       />
